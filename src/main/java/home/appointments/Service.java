@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
  * Represents the services which may be provided by the business utilizing this application. For example if application
  * is used by a hair salon an example of service would be "haircut".
  */
-public class Service {
+class Service {
 
     @Id
     @GeneratedValue
