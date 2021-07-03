@@ -12,6 +12,10 @@ import javax.validation.constraints.NotBlank;
                 columnNames = {"name"})})
 @EqualsAndHashCode
 @ToString
+/**
+ * Represents the services which may be provided by the business utilizing this application. For example if application
+ * is used by a hair salon an example of service would be "haircut".
+ */
 public class Service {
 
     @Id
@@ -24,13 +28,31 @@ public class Service {
     private String name;
 
     // Constructor used by Hibernate
+
+    /**
+     * Constructor only for usage by Hibernate, should not be used anywhere else
+     */
     Service() {
     }
 
+    /**
+     * Creates an object which represents a service offered by some business.
+     *
+     * The input parameter needs to be a non-null, non-empty, non-blank String of length up to 255 characters.
+     * @param name - the name of the Service which we would like to provide
+     * @throws NullPointerException - if input parameter is null
+     * @throws IllegalArgumentException - if input parameter is empty, blank or exceeds 255 characters
+     */
     public Service(@NonNull String name) {
         setName(name);
     }
 
+    /**
+     * Changes the name of the service
+     * @param name - the name of the Service which we would like to provide
+     * @throws NullPointerException - if input parameter is null
+     * @throws IllegalArgumentException - if input parameter is empty, blank or exceeds 255 characters
+     */
     public void setName(String name) {
         validate(name);
         this.name = name;
