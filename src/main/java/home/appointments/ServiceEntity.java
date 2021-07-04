@@ -12,17 +12,18 @@ import javax.validation.constraints.NotBlank;
                 columnNames = {"name"})})
 @EqualsAndHashCode
 @ToString
+@Getter
 /**
  * Represents the services which may be provided by the business utilizing this application. For example if application
  * is used by a hair salon an example of service would be "haircut".
  */
-class Service {
+class ServiceEntity {
 
     @Id
     @GeneratedValue
     private Integer id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     @NotBlank
     @Length(max = 255)
     private String name;
@@ -32,7 +33,7 @@ class Service {
     /**
      * Constructor only for usage by Hibernate, should not be used anywhere else
      */
-    Service() {
+    ServiceEntity() {
     }
 
     /**
@@ -43,7 +44,7 @@ class Service {
      * @throws NullPointerException - if input parameter is null
      * @throws IllegalArgumentException - if input parameter is empty, blank or exceeds 255 characters
      */
-    public Service(@NonNull String name) {
+    public ServiceEntity(@NonNull String name) {
         setName(name);
     }
 
