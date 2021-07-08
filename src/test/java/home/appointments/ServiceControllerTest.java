@@ -3,6 +3,7 @@ package home.appointments;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,15 +46,15 @@ public class ServiceControllerTest {
         assertThrows(ServiceNotFoundException.class, () -> controller.getServiceById(999));
     }
 
-//    @Test
-//    public void returnsStatus404WhenAskingForServiceByIdWhenNoServiceHasSuchId() {
-//        populateDatabaseWithServiceInstances();
-//        try {
-//            controller.getServiceById(999);
-//        } catch (ServiceNotFoundException ex) {
-//
-//        }
-//    }
+    @Test
+    public void returnsStatus404WhenAskingForServiceByIdWhenNoServiceHasSuchId() {
+        populateDatabaseWithServiceInstances();
+        try {
+            controller.getServiceById(999);
+        } catch (ServiceNotFoundException ex) {
+            assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+        }
+    }
 
     private Set<ServiceEntity> populateDatabaseWithServiceInstances() {
         ServiceEntity firstServiceEntity = new ServiceEntity("first");
