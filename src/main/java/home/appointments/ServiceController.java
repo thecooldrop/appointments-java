@@ -25,6 +25,6 @@ public class ServiceController {
     public ResponseEntity<ServiceEntity> getServiceById(@PathVariable Integer id) {
         return serviceData.findById(id)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(ServiceNotFoundException::new);
     }
 }

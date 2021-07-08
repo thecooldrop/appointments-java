@@ -3,15 +3,18 @@ package home.appointments;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
+@Transactional(isolation = Isolation.SERIALIZABLE)
 public class ServiceControllerTest {
 
     @Autowired
@@ -37,11 +40,20 @@ public class ServiceControllerTest {
     }
 
     @Test
-    public void returns404WhenAskingForServiceByIdWhenNoServiceHasId() {
+    public void returnsExceptionWhenAskingForServiceByIdWhenNoServiceHasId() {
         populateDatabaseWithServiceInstances();
-        ResponseEntity<ServiceEntity> serviceResponse = controller.getServiceById(999);
-        assertEquals(HttpStatus.NOT_FOUND, serviceResponse.getStatusCode());
+        assertThrows(ServiceNotFoundException.class, () -> controller.getServiceById(999));
     }
+
+//    @Test
+//    public void returnsStatus404WhenAskingForServiceByIdWhenNoServiceHasSuchId() {
+//        populateDatabaseWithServiceInstances();
+//        try {
+//            controller.getServiceById(999);
+//        } catch (ServiceNotFoundException ex) {
+//
+//        }
+//    }
 
     private Set<ServiceEntity> populateDatabaseWithServiceInstances() {
         ServiceEntity firstServiceEntity = new ServiceEntity("first");
