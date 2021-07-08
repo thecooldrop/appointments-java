@@ -1,4 +1,4 @@
-package home.appointments;
+package home.appointments.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,18 +28,18 @@ public class ServiceControllerTest {
 
     @Test
     public void canReturnAllServices() {
-        Set<ServiceEntity> services = populateDatabaseWithServiceInstances();
+        List<ServiceEntity> services = populateDatabaseWithServiceInstances();
         ResponseEntity<Set<ServiceEntity>> restServices = controller.getAllServices();
-        assertEquals(services, restServices.getBody());
+        assertEquals(new HashSet<>(services), restServices.getBody());
     }
 
     @Test
     public void canReturnServiceById() {
-        populateDatabaseWithServiceInstances();
-        ResponseEntity<ServiceEntity> serviceResponse = controller.getServiceById(1);
+        List<ServiceEntity> services = populateDatabaseWithServiceInstances();
+        Integer serviceId = services.get(0).getId();
+        ResponseEntity<ServiceEntity> serviceResponse = controller.getServiceById(serviceId);
         ServiceEntity serviceInstance = serviceResponse.getBody();
-        assertEquals(1, serviceInstance.getId());
-        assertEquals("first", serviceInstance.getName());
+        assertEquals(services.get(0), serviceInstance);
     }
 
     @Test
@@ -56,16 +58,16 @@ public class ServiceControllerTest {
         }
     }
 
-    private Set<ServiceEntity> populateDatabaseWithServiceInstances() {
+    private List<ServiceEntity> populateDatabaseWithServiceInstances() {
         ServiceEntity firstServiceEntity = new ServiceEntity("first");
         ServiceEntity secondServiceEntity = new ServiceEntity("second");
         ServiceEntity thirdServiceEntity = new ServiceEntity("third");
 
-        Set<ServiceEntity> serviceEntities = new HashSet<>(3);
+        List<ServiceEntity> serviceEntities = new ArrayList<>(3);
         serviceEntities.add(firstServiceEntity);
         serviceEntities.add(secondServiceEntity);
         serviceEntities.add(thirdServiceEntity);
 
-        return new HashSet<>(serviceDao.saveAll(serviceEntities));
+        return serviceDao.saveAll(serviceEntities);
     }
 }

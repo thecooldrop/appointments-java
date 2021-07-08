@@ -1,4 +1,4 @@
-package home.appointments;
+package home.appointments.service;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

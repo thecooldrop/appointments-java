@@ -1,4 +1,4 @@
-package home.appointments;
+package home.appointments.service;
 
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -54,7 +54,7 @@ class ServiceEntity {
      * @throws NullPointerException - if input parameter is null
      * @throws IllegalArgumentException - if input parameter is empty, blank or exceeds 255 characters
      */
-    public void setName(String name) {
+    void setName(String name) {
         validate(name);
         this.name = name;
     }
