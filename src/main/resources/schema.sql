@@ -52,5 +52,3 @@ create table provider_location_time(
     constraint APPOINTMENT_PROVIDED_BY_SINGLE_PROVIDER exclude using gist (provider_id WITH <>, appointment_id WITH =),
     constraint APPOINTMENT_PROVIDED_AT_SINGLE_LOCATION exclude using gist (appointment_id with =, location_id with <>)
 );
-
-------------------------------------------------------------------------------------------------------------
