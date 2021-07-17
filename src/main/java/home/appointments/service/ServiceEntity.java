@@ -6,6 +6,10 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Represents the services which may be provided by the business utilizing this application. For example if application
+ * is used by a hair salon an example of service would be "haircut".
+ */
 @Entity
 @Table(name = "services",
         uniqueConstraints = {@UniqueConstraint(name = "SERVICE_UNIQUE_NAME",
@@ -13,10 +17,6 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode
 @ToString
 @Getter
-/**
- * Represents the services which may be provided by the business utilizing this application. For example if application
- * is used by a hair salon an example of service would be "haircut".
- */
 class ServiceEntity {
 
     @Id
