@@ -19,11 +19,10 @@
 -- Idea: maybe we can add an nullable foreign key from provider_location_time to appointment
 ----------------------------------------------------------------------------------------------------------------
 CREATE EXTENSION citext;
-CREATE DOMAIN email AS citext
-  CHECK ( value ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' );
+
 create table provider (
     id serial primary key,
-    first_name varchar(128) not null check(first_name = lower(first_name))
+    first_name varchar(128) not null check(first_name = lower(first_name)),
     last_name varchar(128) not null check(last_name = lower(last_name))
 );
 create table service (
@@ -31,9 +30,9 @@ create table service (
     service_price_id integer not null,
     name varchar(255) not null check(name = lower(name)),
     description text not null,
-    duration interval not null,
+    duration_minutes integer not null check(duration_minutes > 0),
     unique(name),
-    foreign key (service_price_id) references service_price(id),
+    foreign key (service_price_id) references service_price(id) on delete restrict on update cascade
 );
 create table service_price (
     id serial primary key,
@@ -48,9 +47,15 @@ create table location (
 create table appointment (
     id serial primary key,
     service_id integer not null,
-    customer_id varchar(255) not null check(customer_id = lower(customer_id)),
+    customer_id integer not null,
+    foreign key (customer_id) references customer_data(id) on delete restrict on update cascade
+);
+create table customer_data (
+    id serial primary key,
+    first_name varchar(255) not null,
+    last_name varchar(255) not null,
     customer_phone text check (customer_phone like '+3876[1-6][0-9][0-9][0-9][0-9][0-9][0-9][0-9]?'),
-    customer_mail email
+    customer_mail citext
 );
 create table provider_location_time (
     id serial primary key,
@@ -58,9 +63,9 @@ create table provider_location_time (
     location_id integer not null,
     time_block timestamp not null check (cast(extract(minute from time_block) as integer) % 5 = 0 and cast(extract(second from time_block) as integer) = 0),
     appointment_id integer,
-    foreign key (provider_id) references provider(id),
-    foreign key (location_id) references location(id),
-    foreign key (appointment_id) references appointment(id),
+    foreign key (provider_id) references provider(id) on delete restrict on update cascade,
+    foreign key (location_id) references location(id) on delete restrict on update cascade,
+    foreign key (appointment_id) references appointment(id) on delete restrict on update cascade,
     constraint PROVIDER_AT_SINGLE_LOCATION_AT_A_TIME unique(provider_id, time_block), -- Provider can be at single location at given time
     constraint APPOINTMENT_BOOKS_TIME_ONCE unique(appointment_id, time_block), -- appointment books a single time block once
     constraint APPOINTMENT_PROVIDED_BY_SINGLE_PROVIDER exclude using gist (provider_id WITH <>, appointment_id WITH =),
