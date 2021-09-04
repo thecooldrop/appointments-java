@@ -32,6 +32,7 @@ create table service (
     description text not null,
     duration_minutes integer not null check(duration_minutes > 0),
     unique(name),
+    unique(service_price_id),
     foreign key (service_price_id) references service_price(id) on delete restrict on update cascade
 );
 create table service_price (
