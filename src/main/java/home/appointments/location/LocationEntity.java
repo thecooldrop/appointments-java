@@ -1,5 +1,7 @@
 package home.appointments.location;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 import org.hibernate.validator.constraints.Length;
 
@@ -8,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "locations", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
+@Getter(AccessLevel.PACKAGE)
 class LocationEntity {
 
     @NotNull
@@ -17,7 +20,7 @@ class LocationEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     public LocationEntity() {}
     public LocationEntity(@NonNull String locationName) {
