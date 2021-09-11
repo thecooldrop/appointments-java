@@ -40,4 +40,17 @@ public class LocationEntityTest {
            new LocationEntity("a".repeat(256));
         });
     }
+
+    @Test
+    void staticFromMethodReturnsAFilledOptionalIfWeTryToConstructFromValidLocationName() {
+        Assertions.assertTrue(LocationEntity.from("location").isPresent());
+    }
+
+    @Test
+    void staticMethodReturnsEmptyOptionalIfWeTryToConstrucFromInvalidValue() {
+        Assertions.assertTrue(LocationEntity.from(null).isEmpty());
+        Assertions.assertTrue(LocationEntity.from("").isEmpty());
+        Assertions.assertTrue(LocationEntity.from("\n\t").isEmpty());
+        Assertions.assertTrue(LocationEntity.from("a".repeat(256)).isEmpty());
+    }
 }
