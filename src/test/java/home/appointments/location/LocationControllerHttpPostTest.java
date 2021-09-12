@@ -56,4 +56,6 @@ public class LocationControllerHttpPostTest {
             Assertions.assertThrows(InvalidLocationNameException.class, () -> locationsController.post(new LocationName(improperlyFormattedLocationName)));
         }
     }
+
+    // TODO: Add test that location header is included pointing to URL under which created location entity can be found with /locations/{id}
 }
