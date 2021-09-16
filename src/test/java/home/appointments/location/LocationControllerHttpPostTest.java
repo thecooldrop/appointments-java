@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,5 +58,4 @@ public class LocationControllerHttpPostTest {
         }
     }
 
-    // TODO: Add test that location header is included pointing to URL under which created location entity can be found with /locations/{id}
 }
