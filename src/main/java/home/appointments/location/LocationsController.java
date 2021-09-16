@@ -33,4 +33,15 @@ public class LocationsController {
                 .map(e -> new ResponseEntity<>(e, HttpStatus.CREATED))
                 .orElseThrow(InvalidLocationNameException::new);
     }
+
+    @DeleteMapping(path = "/locations/{id}")
+    public ResponseEntity<LocationEntity> deleteById(@PathVariable("id") Long id) {
+        return repository.findById(id)
+                .map(e -> {
+                    repository.deleteById(e.getId());
+                    return e;
+                })
+                .map(e -> new ResponseEntity<LocationEntity>(e, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
+    }
 }
