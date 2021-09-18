@@ -1,7 +1,12 @@
 package home.appointments.providers;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProvidersEntityTest {
 
@@ -42,12 +47,12 @@ public class ProvidersEntityTest {
 
     @Test
     public void providerLastNameCanNotBeLongerThan128Chars() {
-        assertThrows(IllegalArgumentException.class, () -> new ProviderEntity("Vanio", "a".repeat(129)));
+        assertThrows(IllegalArgumentException.class, () -> new ProviderEntity("vanio", "a".repeat(129)));
     }
 
     @Test
     public void canNotSetNullFirstName() {
-        ProviderEntity entity = new ProviderEntity("Vanio", "Begic");
+        ProviderEntity entity = new ProviderEntity("vanio", "begic");
         assertThrows(NullPointerException.class, () -> {
             entity.setFirstName(null);
         });
@@ -55,7 +60,7 @@ public class ProvidersEntityTest {
 
     @Test
     public void canNotSetNullLastName() {
-        ProviderEntity entity = new ProviderEntity("Vanio", "Begic");
+        ProviderEntity entity = new ProviderEntity("vanio", "begic");
         assertThrows(NullPointerException.class, () -> {
             entity.setLastName(null);
         });
@@ -63,7 +68,7 @@ public class ProvidersEntityTest {
 
     @Test
     public void canNotSetEmptyFirstName() {
-        ProviderEntity entity = new ProviderEntity("Vanio", "Begic");
+        ProviderEntity entity = new ProviderEntity("vanio", "begic");
         assertThrows(IllegalArgumentException.class, () -> {
             entity.setFirstName("");
         });
@@ -71,7 +76,7 @@ public class ProvidersEntityTest {
 
     @Test
     public void canNotSetBlankFirstName() {
-        ProviderEntity entity = new ProviderEntity("Vanio", "Begic");
+        ProviderEntity entity = new ProviderEntity("vanio", "begic");
         assertThrows(IllegalArgumentException.class, () -> {
             entity.setFirstName("   ");
         });
@@ -79,7 +84,7 @@ public class ProvidersEntityTest {
 
     @Test
     public void canNotSetEmptyLastName() {
-        ProviderEntity entity = new ProviderEntity("Vanio", "Begic");
+        ProviderEntity entity = new ProviderEntity("vanio", "begic");
         assertThrows(IllegalArgumentException.class, () -> {
             entity.setLastName("");
         });
@@ -87,9 +92,35 @@ public class ProvidersEntityTest {
 
     @Test
     public void canNotSetBlankLastName() {
-        ProviderEntity entity = new ProviderEntity("Vanio", "Begic");
+        ProviderEntity entity = new ProviderEntity("vanio", "begic");
         assertThrows(IllegalArgumentException.class, () -> {
             entity.setLastName("   ");
         });
+    }
+
+    @Test
+    public void firstnameCanNotContainUppercaseCharacters() {
+        assertThrows(IllegalArgumentException.class, () -> new ProviderEntity("Vanio", "begic"));
+    }
+
+    @Test
+    public void lastNameCanNotContainUppercaseCharacters() {
+        assertThrows(IllegalArgumentException.class, () -> new ProviderEntity("vanio", "Begic"));
+    }
+
+    @Test
+    public void canConstructProviderEntityFromValidInputs() {
+        Optional<ProviderEntity> providerEntity = ProviderEntity.from("vanio", "begic");
+        Assertions.assertTrue(providerEntity.isPresent());
+    }
+
+    @Test
+    public void canNotConstructProviderEntityFromInvalidInputs() {
+        Optional<ProviderEntity> nullInputEntity = ProviderEntity.from(null, null);
+        Optional<ProviderEntity> blankInputEntity = ProviderEntity.from("", "\n\t  ");
+        Optional<ProviderEntity> tooLongNamesEntity = ProviderEntity.from("a".repeat(129), "a".repeat(129));
+        assertTrue(nullInputEntity.isEmpty());
+        assertTrue(blankInputEntity.isEmpty());
+        assertTrue(tooLongNamesEntity.isEmpty());
     }
 }

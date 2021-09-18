@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import java.util.Optional;
 
 
 /**
@@ -78,17 +79,29 @@ class ProviderEntity {
         this.lastName = lastName;
     }
 
-    private void validateNames(String firstName, String lastName) {
+    private static void validateNames(String firstName, String lastName) {
         validateName(firstName, NameKind.FIRST);
         validateName(lastName, NameKind.LAST);
     }
 
-    private void validateName(String name, NameKind nameKind) {
+    private static void validateName(String name, NameKind nameKind) {
         if(name.isBlank()) {
             throw new IllegalArgumentException("The " + nameKind.name() + " name of the provider can not be blank");
         }
         if(name.length() > 128) {
             throw new IllegalArgumentException("The " + nameKind.name() + " name of the provider can not be longer than 128 charachters");
+        }
+        if(!name.equals(name.toLowerCase())) {
+            throw new IllegalArgumentException("The " + nameKind.name() + " name of the provider can not contain uppercase letters");
+        }
+    }
+
+    public static Optional<ProviderEntity> from(String firstName, String lastName) {
+        try {
+            validateNames(firstName, lastName);
+            return Optional.of(new ProviderEntity(firstName, lastName));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            return Optional.empty();
         }
     }
 
