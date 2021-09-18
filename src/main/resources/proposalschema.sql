@@ -20,6 +20,11 @@
 ----------------------------------------------------------------------------------------------------------------
 CREATE EXTENSION citext;
 
+create table location (
+    id serial primary key,
+    name varchar(255) not null check(name = lower(name)),
+    unique(name)
+);
 create table provider (
     id serial primary key,
     first_name varchar(128) not null check(first_name = lower(first_name)),
@@ -39,11 +44,6 @@ create table service_price (
     id serial primary key,
     price_km integer not null check(price_km >= 0),
     price_fening integer not null check(price_fening >= 0)
-);
-create table location (
-    id serial primary key,
-    name varchar(255) not null check(name = lower(name)),
-    unique(name)
 );
 create table appointment (
     id serial primary key,

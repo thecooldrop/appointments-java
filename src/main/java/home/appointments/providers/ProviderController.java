@@ -8,21 +8,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
 class ProviderController {
 
-    private final ProviderDao providerAccessor;
+    private final ProviderRepository providerAccessor;
 
     @Autowired
-    ProviderController(ProviderDao providerAccessor) {
+    ProviderController(ProviderRepository providerAccessor) {
         this.providerAccessor = providerAccessor;
     }
 
     @GetMapping(path = "/providers", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Set<ProviderEntity>> getProviders() {
-        return ResponseEntity.ok(new HashSet<>(providerAccessor.findAll()));
+    public ResponseEntity<List<ProviderEntity>> getProviders() {
+        return ResponseEntity.ok(providerAccessor.findAll());
     }
 
     @GetMapping(path = "/prvoiders/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
