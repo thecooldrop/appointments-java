@@ -36,7 +36,7 @@ public class ProviderControllerDeleteTest {
         List<ProviderEntity> providersBeforeDelete = repository.findAll();
         ProviderEntity providerToDelete = providersBeforeDelete.get(0);
 
-        ResponseEntity<ProviderEntity> deletedProvider = controller.deleteById(providerToDelete.getId());
+        controller.deleteById(providerToDelete.getId());
 
         List<ProviderEntity> providersAfterDelete = repository.findAll();
         if(providersAfterDelete.size() >= providersBeforeDelete.size()) {
