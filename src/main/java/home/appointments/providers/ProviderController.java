@@ -3,10 +3,7 @@ package home.appointments.providers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
@@ -34,7 +31,7 @@ class ProviderController {
     }
 
     @PostMapping(path="/providers")
-    public ResponseEntity<ProviderEntity> post(ProviderRequest providerToCreate) {
+    public ResponseEntity<ProviderEntity> post(@RequestBody ProviderRequest providerToCreate) {
         return ProviderEntity.from(providerToCreate.getFirstName(), providerToCreate.getLastName())
                 .map(providerAccessor::save)
                 .map(e -> ResponseEntity.created(ServletUriComponentsBuilder.fromPath("/providers/{id}").buildAndExpand(e.getId()).toUri()).body(e))

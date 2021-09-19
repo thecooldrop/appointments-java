@@ -10,7 +10,7 @@ public class ProviderRequest {
 
     public ProviderRequest(@NonNull String firstName, @NonNull String lastName) {
         if(firstName.isBlank() || lastName.isBlank()) {
-            throw new IllegalArgumentException("First and last name of the provider may not be null");
+            throw new IllegalArgumentException("First and last name of the provider may not be blank");
         }
         if(firstName.length() > 128 || lastName.length() > 128) {
             throw new IllegalArgumentException("First and last name of the provider may not be longer than 128 characters");
