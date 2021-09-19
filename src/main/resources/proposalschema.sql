@@ -42,8 +42,8 @@ create table service (
 );
 create table service_price (
     id serial primary key,
-    price_km integer not null check(price_km >= 0),
-    price_fening integer not null check(price_fening >= 0)
+    price_unit integer not null check(price_km >= 0),
+    price_hundredth integer not null check(price_fening >= 0)
 );
 create table appointment (
     id serial primary key,
