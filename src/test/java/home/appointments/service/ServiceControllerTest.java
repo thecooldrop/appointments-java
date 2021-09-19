@@ -61,9 +61,9 @@ public class ServiceControllerTest {
     }
 
     private List<ServiceEntity> populateDatabaseWithServiceInstances() {
-        PriceEntity firstPrice = new PriceEntity();
-        PriceEntity secondPrice = new PriceEntity();
-        PriceEntity thirdPrice = new PriceEntity();
+        PriceEntity firstPrice = new PriceEntity(100, 10);
+        PriceEntity secondPrice = new PriceEntity(1, 10);
+        PriceEntity thirdPrice = new PriceEntity(10, 10);
         em.persist(firstPrice);
         em.persist(secondPrice);
         em.persist(thirdPrice);

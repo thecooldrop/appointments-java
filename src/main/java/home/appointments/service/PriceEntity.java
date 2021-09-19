@@ -21,6 +21,7 @@ class PriceEntity {
     @Positive
     private Integer priceHundredth;
 
+    // Constructor only for usage by Hibernate
     PriceEntity() {
 
     }
