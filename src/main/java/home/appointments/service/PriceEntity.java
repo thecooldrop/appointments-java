@@ -1,12 +1,18 @@
 package home.appointments.service;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
 @Entity
 @Table(name = "price")
+@Getter
+@EqualsAndHashCode
+@ToString
 class PriceEntity {
 
     @Id
