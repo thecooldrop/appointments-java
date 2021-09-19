@@ -37,24 +37,4 @@ public class LocationControllerHttpPostTest {
         Assertions.assertEquals(HttpStatus.CREATED, locationsController.post(new LocationName("location")).getStatusCode());
     }
 
-    @Test
-    void whenImproperlyFormattedLocationNameIsGivenReturnsHttpStatusCode400() {
-        String[] improperlyFormattedLocationNames = new String[] {null, "", "\n\t", "a".repeat(256)};
-        for(String improperlyFormattedLocationName : improperlyFormattedLocationNames) {
-            try {
-                locationsController.post(new LocationName(improperlyFormattedLocationName));
-            } catch (InvalidLocationNameException e) {
-                Assertions.assertEquals(HttpStatus.BAD_REQUEST, e.getStatus());
-            }
-        }
-    }
-
-    @Test
-    void whenImproperlyFormattedLocationNameIsGivenThrowsInvalidLocationNameException() {
-        String[] improperlyFormattedLocationNames = new String[] {null, "", "\n\t", "a".repeat(256)};
-        for(String improperlyFormattedLocationName : improperlyFormattedLocationNames) {
-            Assertions.assertThrows(InvalidLocationNameException.class, () -> locationsController.post(new LocationName(improperlyFormattedLocationName)));
-        }
-    }
-
 }
