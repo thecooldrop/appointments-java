@@ -8,10 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,6 +24,9 @@ public class ServiceControllerTest {
 
     @Autowired
     private ServiceDao serviceDao;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Test
     public void canReturnAllServices() {
@@ -59,15 +61,18 @@ public class ServiceControllerTest {
     }
 
     private List<ServiceEntity> populateDatabaseWithServiceInstances() {
-        ServiceEntity firstServiceEntity = new ServiceEntity("first");
-        ServiceEntity secondServiceEntity = new ServiceEntity("second");
-        ServiceEntity thirdServiceEntity = new ServiceEntity("third");
-
-        List<ServiceEntity> serviceEntities = new ArrayList<>(3);
-        serviceEntities.add(firstServiceEntity);
-        serviceEntities.add(secondServiceEntity);
-        serviceEntities.add(thirdServiceEntity);
-
-        return serviceDao.saveAll(serviceEntities);
+        PriceEntity firstPrice = new PriceEntity();
+        PriceEntity secondPrice = new PriceEntity();
+        PriceEntity thirdPrice = new PriceEntity();
+        em.persist(firstPrice);
+        em.persist(secondPrice);
+        em.persist(thirdPrice);
+        em.flush();
+        ServiceEntity firstServiceEntity = new ServiceEntity("first", "description", 30, firstPrice);
+        ServiceEntity secondServiceEntity = new ServiceEntity("second", "second description", 35, secondPrice);
+        ServiceEntity thirdServiceEntity = new ServiceEntity("third", "third description", 40, thirdPrice);
+        List<ServiceEntity> services = serviceDao.saveAll(Arrays.asList(firstServiceEntity, secondServiceEntity, thirdServiceEntity));
+        serviceDao.flush();
+        return services;
     }
 }

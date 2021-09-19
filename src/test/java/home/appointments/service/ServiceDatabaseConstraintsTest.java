@@ -27,8 +27,12 @@ public class ServiceDatabaseConstraintsTest {
     @Test
     public void testServiceNameIsUniqueInDatabase() {
         assertThrows(PersistenceException.class, () -> {
-            ServiceEntity first = new ServiceEntity("first");
-            ServiceEntity second = new ServiceEntity("first");
+            PriceEntity firstPriceEntity = new PriceEntity();
+            PriceEntity secondPriceEntity = new PriceEntity();
+            em.persist(firstPriceEntity);
+            em.persist(secondPriceEntity);
+            ServiceEntity first = new ServiceEntity("first", "Description", 30, firstPriceEntity);
+            ServiceEntity second = new ServiceEntity("first", "Second description", 35, secondPriceEntity);
             serviceDao.save(first);
             serviceDao.save(second);
             em.flush();

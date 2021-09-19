@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 
 /**
  * Represents the services which may be provided by the business utilizing this application. For example if application
@@ -12,8 +13,10 @@ import javax.validation.constraints.NotBlank;
  */
 @Entity
 @Table(name = "services",
-        uniqueConstraints = {@UniqueConstraint(name = "SERVICE_UNIQUE_NAME",
-                columnNames = {"name"})})
+        uniqueConstraints = {
+            @UniqueConstraint(name = "SERVICE_UNIQUE_NAME", columnNames = {"name"}),
+            @UniqueConstraint(name = "SERVICE_UNIQUE_PRICE", columnNames = {"service_price_id"}),
+        })
 @EqualsAndHashCode
 @ToString
 @Getter
@@ -28,7 +31,17 @@ class ServiceEntity {
     @Length(max = 255)
     private String name;
 
-    // Constructor used by Hibernate
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "duration_minutes", nullable = false)
+    @Positive
+    private Integer durationMinutes;
+
+    @OneToOne
+    @JoinColumn(name = "service_price_id")
+    private PriceEntity servicePrice;
+
 
     /**
      * Constructor only for usage by Hibernate, should not be used anywhere else
@@ -44,20 +57,22 @@ class ServiceEntity {
      * @throws NullPointerException - if input parameter is null
      * @throws IllegalArgumentException - if input parameter is empty, blank or exceeds 255 characters
      */
-    public ServiceEntity(@NonNull String name) {
-        setName(name);
+    public ServiceEntity(@NonNull String name, @NonNull String description, @NonNull Integer durationMinutes, @NonNull PriceEntity servicePrice) {
+        if(name.isBlank()) {
+            throw new IllegalArgumentException("Parameter name may not be empty or blank string");
+        }
+        if(name.length() > 255) {
+            throw new IllegalArgumentException("Parameter name may not be longer than 255 characters");
+        }
+        if(durationMinutes <= 0) {
+            throw new IllegalArgumentException("Parameter durationMinutes must be positive integer");
+        }
+        this.name = name;
+        this.description = description;
+        this.durationMinutes = durationMinutes;
+        this.servicePrice = servicePrice;
     }
 
-    /**
-     * Changes the name of the service
-     * @param name - the name of the Service which we would like to provide
-     * @throws NullPointerException - if input parameter is null
-     * @throws IllegalArgumentException - if input parameter is empty, blank or exceeds 255 characters
-     */
-    void setName(String name) {
-        validate(name);
-        this.name = name;
-    }
 
     private void validate(String name) {
         if(name.isEmpty()) {
