@@ -37,4 +37,15 @@ class ProviderController {
                 .map(e -> ResponseEntity.created(ServletUriComponentsBuilder.fromPath("/providers/{id}").buildAndExpand(e.getId()).toUri()).body(e))
                 .orElseThrow(InvalidProviderNames::new);
     }
+
+    @DeleteMapping(path="/providers/{id}")
+    public ResponseEntity<ProviderEntity> deleteById(@PathVariable Integer id) {
+        return providerAccessor.findById(id)
+                .map(e -> {
+                    providerAccessor.deleteById(e.getId());
+                    return e;
+                })
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
+    }
 }

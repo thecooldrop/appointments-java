@@ -43,6 +43,8 @@ public class LocationControllerHttpDeleteTest {
         if(numberOfLocationsAfterDelete >= numberOfLocationsBeforeDelete) {
             throw new IllegalStateException("There should be one less entry after delete");
         }
+
+        Assertions.assertTrue(locationsRepository.findById(locationsBeforeDelete.get(0).getId()).isEmpty());
     }
 
     @Test
