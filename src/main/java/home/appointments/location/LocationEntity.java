@@ -33,9 +33,6 @@ class LocationEntity {
         if(locationName.isBlank()) {
             throw new IllegalArgumentException("Argument locationName contains a blank string!");
         }
-        if(locationName.isEmpty()) {
-            throw new IllegalArgumentException("Argument locationName contains an empty string!");
-        }
         if(locationName.length() > 255) {
             throw new IllegalArgumentException("Argument locationName can not contain more than 255 characters");
         }

@@ -21,7 +21,6 @@ public class LocationControllerHttpGetTest {
     @Autowired
     private LocationsRepository locationsRepository;
 
-    @BeforeEach
      void prepareLocationEntitiesIntoDatabase() {
         LocationEntity first = new LocationEntity("first");
         LocationEntity second = new LocationEntity("second");
@@ -67,26 +66,15 @@ public class LocationControllerHttpGetTest {
 
     @Test
     void tryingToRetrieveALocationWhichDoesNotExistResultsInLocationDoesNotExistException() {
-        Long nonExistentId = Collections.max(locationEntityIds()) + 100;
-        Assertions.assertThrows(LocationDoesNotExistException.class, () -> locationsController.getById(nonExistentId));
+        Assertions.assertThrows(LocationDoesNotExistException.class, () -> locationsController.getById(100L));
     }
 
     @Test
     void tryingToRetrieveALocationWhichDoesNotExistResultsIn404HttpStatusCode() {
-        Long nonExistentId = Collections.max(locationEntityIds()) + 100;
         try {
-            locationsController.getById(nonExistentId);
+            locationsController.getById(100L);
         } catch (LocationDoesNotExistException e) {
             Assertions.assertEquals(HttpStatus.NOT_FOUND, e.getStatus());
         }
-    }
-
-    private List<Long> locationEntityIds() {
-        List<LocationEntity> locationsInDatabase = locationsRepository.findAll();
-        List<Long> locationEntityIds = new ArrayList<>();
-        for(LocationEntity entity : locationsInDatabase) {
-            locationEntityIds.add(entity.getId());
-        }
-        return locationEntityIds;
     }
 }

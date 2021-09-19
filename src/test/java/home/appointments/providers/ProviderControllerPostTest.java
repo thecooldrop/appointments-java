@@ -40,13 +40,13 @@ public class ProviderControllerPostTest {
         Assertions.assertEquals(responseHeaders.getLocation(), URI.create("/providers/"+createdProviderEntity.getBody().getId()));
     }
 
-    @Test
-    void creatingAProviderWithInvalidNamesLeadsToAnExceptionWithStatusCode400() {
-        ProviderRequest req = new ProviderRequest("a".repeat(129),"b");
-        try {
-            providerController.post(req);
-        } catch (InvalidProviderNames e) {
-            Assertions.assertEquals(HttpStatus.BAD_REQUEST, e.getStatus());
-        }
-    }
+//    @Test
+//    void creatingAProviderWithInvalidNamesLeadsToAnExceptionWithStatusCode400() {
+//        ProviderRequest req = new ProviderRequest("a".repeat(129),"b");
+//        try {
+//            providerController.post(req);
+//        } catch (InvalidProviderNames e) {
+//            Assertions.assertEquals(HttpStatus.BAD_REQUEST, e.getStatus());
+//        }
+//    }
 }
