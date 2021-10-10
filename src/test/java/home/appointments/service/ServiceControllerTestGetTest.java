@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional(isolation = Isolation.SERIALIZABLE)
-public class ServiceControllerTest {
+public class ServiceControllerTestGetTest {
 
     @Autowired
     private ServiceController controller;
@@ -61,9 +61,9 @@ public class ServiceControllerTest {
     }
 
     private List<ServiceEntity> populateDatabaseWithServiceInstances() {
-        PriceEntity firstPrice = new PriceEntity(100, 10);
-        PriceEntity secondPrice = new PriceEntity(1, 10);
-        PriceEntity thirdPrice = new PriceEntity(10, 10);
+        PriceEntity firstPrice = new PriceEntity(100,0);
+        PriceEntity secondPrice = new PriceEntity(100, 0);
+        PriceEntity thirdPrice = new PriceEntity(100, 0);
         em.persist(firstPrice);
         em.persist(secondPrice);
         em.persist(thirdPrice);

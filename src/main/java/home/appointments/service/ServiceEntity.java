@@ -67,7 +67,7 @@ class ServiceEntity {
         if(durationMinutes <= 0) {
             throw new IllegalArgumentException("Parameter durationMinutes must be positive integer");
         }
-        this.name = name;
+        this.name = name.toLowerCase();
         this.description = description;
         this.durationMinutes = durationMinutes;
         this.servicePrice = servicePrice;

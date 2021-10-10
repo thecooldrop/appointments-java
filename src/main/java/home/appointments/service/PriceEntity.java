@@ -6,13 +6,14 @@ import lombok.NonNull;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "price")
-@Getter
 @EqualsAndHashCode
 @ToString
+@Getter
 class PriceEntity {
 
     @Id
@@ -20,11 +21,13 @@ class PriceEntity {
     private Integer id;
 
     @Column(name = "price_unit", nullable = false)
-    @Positive
+    @PositiveOrZero
+    @NotNull
     private Integer priceUnit;
 
     @Column(name = "price_hundredth", nullable = false)
-    @Positive
+    @PositiveOrZero
+    @NotNull
     private Integer priceHundredth;
 
     // Constructor only for usage by Hibernate

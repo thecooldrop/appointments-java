@@ -60,7 +60,7 @@ public class ProviderControllerDeleteTest {
     }
 
     @Test
-    void deletingNonExistentProviderReturnsEmtpyBodyAndStatusCode204() {
+    void deletingNonExistentProviderReturnsEmptyBodyAndStatusCode204() {
         ResponseEntity<ProviderEntity> deletedProvider = controller.deleteById(1000);
         Assertions.assertNull(deletedProvider.getBody());
         Assertions.assertEquals(HttpStatus.NO_CONTENT, deletedProvider.getStatusCode());
