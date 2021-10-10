@@ -58,17 +58,35 @@ create table customer_data (
     customer_phone text check (customer_phone like '+3876[1-6][0-9][0-9][0-9][0-9][0-9][0-9][0-9]?'),
     customer_mail citext
 );
-create table provider_location_time (
+
+-- Specifies the possible locations at which a provider could possibly be
+create table provider_location_candidate (
     id serial primary key,
     provider_id integer not null,
     location_id integer not null,
-    time_block timestamp not null check (cast(extract(minute from time_block) as integer) % 5 = 0 and cast(extract(second from time_block) as integer) = 0),
-    appointment_id integer,
-    foreign key (provider_id) references provider(id) on delete restrict on update cascade,
-    foreign key (location_id) references location(id) on delete restrict on update cascade,
-    foreign key (appointment_id) references appointment(id) on delete restrict on update cascade,
-    constraint PROVIDER_AT_SINGLE_LOCATION_AT_A_TIME unique(provider_id, time_block), -- Provider can be at single location at given time
-    constraint APPOINTMENT_BOOKS_TIME_ONCE unique(appointment_id, time_block), -- appointment books a single time block once
-    constraint APPOINTMENT_PROVIDED_BY_SINGLE_PROVIDER exclude using gist (provider_id WITH <>, appointment_id WITH =),
-    constraint APPOINTMENT_PROVIDED_AT_SINGLE_LOCATION exclude using gist (appointment_id with =, location_id with <>)
+    foreign key (provider_id) references provider(id) on delete cascade on update cascade
+    foreign key (location_id) references location(id) on delete cascade on update cascade
 );
+-- Specifies the times at which the provider is located at a location
+create table provider_location_time (
+    id serial primary key,
+    provider_location_candidate_id integer not null,
+    time_block timestamp not null check (cast(extract(minute from time_block) as integer) % 5 = 0 and cast(extract(second from time_block) as integer) = 0),
+    foreign key (provider_location_candidate_id) references provider_location_candidate(id),
+    constraint PROVIDER_AT_SINGLE_LOCATION_AT_A_TIME unique(time_block)
+);
+
+--create table provider_location_time (
+--    id serial primary key,
+--    provider_id integer not null,
+--    location_id integer not null,
+--    time_block timestamp not null check (cast(extract(minute from time_block) as integer) % 5 = 0 and cast(extract(second from time_block) as integer) = 0),
+--    appointment_id integer,
+--    foreign key (provider_id) references provider(id) on delete restrict on update cascade,
+--    foreign key (location_id) references location(id) on delete restrict on update cascade,
+--    foreign key (appointment_id) references appointment(id) on delete restrict on update cascade,
+--    constraint PROVIDER_AT_SINGLE_LOCATION_AT_A_TIME unique(provider_id, time_block), -- Provider can be at single location at given time
+--    constraint APPOINTMENT_BOOKS_TIME_ONCE unique(appointment_id, time_block), -- appointment books a single time block once
+--    constraint APPOINTMENT_PROVIDED_BY_SINGLE_PROVIDER exclude using gist (provider_id WITH <>, appointment_id WITH =),
+--    constraint APPOINTMENT_PROVIDED_AT_SINGLE_LOCATION exclude using gist (appointment_id with =, location_id with <>)
+--);
