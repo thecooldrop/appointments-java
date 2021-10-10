@@ -44,4 +44,23 @@ public class ServiceController {
                 savedPrice));
         return ResponseEntity.created(ServletUriComponentsBuilder.fromPath("/services/{id}").buildAndExpand(saved.getId()).toUri()).body(saved);
     }
+
+    @DeleteMapping(path="/services/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ServiceEntity> deleteById(@PathVariable Integer id) {
+        return serviceData.findById(id)
+                .map(this::deleteService)
+                .map(this::deletePrice)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
+    }
+
+    private ServiceEntity deleteService(ServiceEntity e) {
+        serviceData.deleteById(e.getId());
+        return e;
+    }
+
+    private ServiceEntity deletePrice(ServiceEntity e) {
+        priceDao.deleteById(e.getServicePrice().getId());
+        return e;
+    }
 }
