@@ -72,17 +72,4 @@ class ServiceEntity {
         this.durationMinutes = durationMinutes;
         this.servicePrice = servicePrice;
     }
-
-
-    private void validate(String name) {
-        if(name.isEmpty()) {
-            throw new IllegalArgumentException("Paramter name may not be an empty string");
-        }
-        if(name.isBlank()) {
-            throw new IllegalArgumentException("Parameter name may not be a blank string");
-        }
-        if(name.length() > 255) {
-            throw new IllegalArgumentException("Parameter name may not be longer than 255 chars");
-        }
-    }
 }
