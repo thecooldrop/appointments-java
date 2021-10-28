@@ -14,7 +14,7 @@ import java.util.Optional;
 @Table(name = "locations", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 @Getter(AccessLevel.PACKAGE)
 @EqualsAndHashCode
-class LocationEntity {
+public class LocationEntity {
 
     @NotNull
     @Column(name = "name", nullable = false, unique = true)
